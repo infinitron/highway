@@ -1543,6 +1543,18 @@ HWY_API Mask128<double, N> operator>=(const Vec128<double, N> a,
   return Mask128<double, N>{_mm_cmpge_pd(a.raw, b.raw)};
 }
 
+// ------------------------------ Reversed comparisons
+
+template <typename T, size_t N>
+HWY_API Mask128<T, N> operator<(Vec128<T, N> a, Vec128<T, N> b) {
+  return b > a;
+}
+
+template <typename T, size_t N>
+HWY_API Mask128<T, N> operator<=(Vec128<T, N> a, Vec128<T, N> b) {
+  return b >= a;
+}
+
 // ------------------------------ FirstN (Iota, Lt)
 
 template <typename T, size_t N, HWY_IF_LE128(T, N)>
@@ -1555,18 +1567,6 @@ template <class D>
 using MFromD = decltype(FirstN(D(), 0));
 
 #endif  // HWY_TARGET <= HWY_AVX3
-
-// ------------------------------ Reversed comparisons
-
-template <typename T, size_t N>
-HWY_API Mask128<T, N> operator<(Vec128<T, N> a, Vec128<T, N> b) {
-  return b > a;
-}
-
-template <typename T, size_t N>
-HWY_API Mask128<T, N> operator<=(Vec128<T, N> a, Vec128<T, N> b) {
-  return b >= a;
-}
 
 // ================================================== MEMORY (1)
 
