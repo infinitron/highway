@@ -210,17 +210,17 @@ target_include_directories(hwy PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 # -------------------------------------------------------- hwy_list_targets
 # Generate a tool to print the compiled-in targets as defined by the current
 # flags. This tool will print to stderr at build time, after building hwy.
-add_executable(hwy_list_targets hwy/tests/list_targets.cc)
-target_compile_options(hwy_list_targets PRIVATE ${HWY_FLAGS})
-target_link_libraries(hwy_list_targets hwy)
-target_include_directories(hwy_list_targets PRIVATE
-  $<TARGET_PROPERTY:hwy,INCLUDE_DIRECTORIES>)
+# add_executable(hwy_list_targets hwy/tests/list_targets.cc)
+# target_compile_options(hwy_list_targets PRIVATE ${HWY_FLAGS})
+# target_link_libraries(hwy_list_targets hwy)
+# target_include_directories(hwy_list_targets PRIVATE
+#   $<TARGET_PROPERTY:hwy,INCLUDE_DIRECTORIES>)
 # TARGET_FILE always returns the path to executable
 # Naked target also not always could be run (due to the lack of '.\' prefix)
 # Thus effective command to run should contain the full path
 # and emulator prefix (if any).
-add_custom_command(TARGET hwy_list_targets POST_BUILD
-    COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} $<TARGET_FILE:hwy_list_targets> || (exit 0))
+# add_custom_command(TARGET hwy_list_targets POST_BUILD
+#     COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} $<TARGET_FILE:hwy_list_targets> || (exit 0))
 
 # --------------------------------------------------------
 # Allow skipping the following sections for projects that do not need them:
@@ -228,17 +228,17 @@ add_custom_command(TARGET hwy_list_targets POST_BUILD
 # if (HWY_EXAMPLES_TESTS_INSTALL)
 
 # -------------------------------------------------------- install library
-install(TARGETS hwy
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# install(TARGETS hwy
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 # Install all the headers keeping the relative path to the current directory
 # when installing them.
-foreach (source ${HWY_SOURCES})
-  if ("${source}" MATCHES "\.h$")
-    get_filename_component(dirname "${source}" DIRECTORY)
-    install(FILES "${source}"
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
-  endif()
-endforeach()
+# foreach (source ${HWY_SOURCES})
+#   if ("${source}" MATCHES "\.h$")
+#     get_filename_component(dirname "${source}" DIRECTORY)
+#     install(FILES "${source}"
+#         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
+#   endif()
+# endforeach()
 
 # install(TARGETS hwy_contrib
 #   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
@@ -291,7 +291,7 @@ endforeach()
 
 # -------------------------------------------------------- Tests
 
-include(CTest)
+# include(CTest)
 
 # if(BUILD_TESTING)
 # enable_testing()
