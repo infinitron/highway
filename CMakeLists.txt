@@ -59,13 +59,13 @@ check_cxx_source_compiles(
   HWY_EMSCRIPTEN
 )
 
-set(HWY_CONTRIB_SOURCES
-    hwy/contrib/dot/dot-inl.h
-    hwy/contrib/image/image.cc
-    hwy/contrib/image/image.h
-    hwy/contrib/math/math-inl.h
-    hwy/contrib/sort/sort-inl.h
-)
+# set(HWY_CONTRIB_SOURCES
+#     hwy/contrib/dot/dot-inl.h
+#     hwy/contrib/image/image.cc
+#     hwy/contrib/image/image.h
+#     hwy/contrib/math/math-inl.h
+#     hwy/contrib/sort/sort-inl.h
+# )
 
 set(HWY_SOURCES
     hwy/aligned_allocator.cc
@@ -76,8 +76,8 @@ set(HWY_SOURCES
     hwy/detect_targets.h  # private
     hwy/foreach_target.h
     hwy/highway.h
-    hwy/nanobenchmark.cc
-    hwy/nanobenchmark.h
+    #hwy/nanobenchmark.cc
+    #hwy/nanobenchmark.h
     hwy/ops/arm_neon-inl.h
     hwy/ops/arm_sve-inl.h
     hwy/ops/generic_ops-inl.h
@@ -92,12 +92,12 @@ set(HWY_SOURCES
     hwy/targets.h
 )
 
-set(HWY_TEST_SOURCES
-    hwy/tests/hwy_gtest.h
-    hwy/tests/test_util-inl.h
-    hwy/tests/test_util.cc
-    hwy/tests/test_util.h
-)
+# set(HWY_TEST_SOURCES
+#     hwy/tests/hwy_gtest.h
+#     hwy/tests/test_util-inl.h
+#     hwy/tests/test_util.cc
+#     hwy/tests/test_util.h
+# )
 
 if (MSVC)
   # TODO(janwas): add flags
@@ -197,15 +197,15 @@ target_compile_options(hwy PRIVATE ${HWY_FLAGS})
 set_property(TARGET hwy PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(hwy PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-add_library(hwy_contrib STATIC ${HWY_CONTRIB_SOURCES})
-target_compile_options(hwy_contrib PRIVATE ${HWY_FLAGS})
-set_property(TARGET hwy_contrib PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(hwy_contrib PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+# add_library(hwy_contrib STATIC ${HWY_CONTRIB_SOURCES})
+# target_compile_options(hwy_contrib PRIVATE ${HWY_FLAGS})
+# set_property(TARGET hwy_contrib PROPERTY POSITION_INDEPENDENT_CODE ON)
+# target_include_directories(hwy_contrib PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-add_library(hwy_test STATIC ${HWY_TEST_SOURCES})
-target_compile_options(hwy_test PRIVATE ${HWY_FLAGS})
-set_property(TARGET hwy_test PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(hwy_test PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+# add_library(hwy_test STATIC ${HWY_TEST_SOURCES})
+# target_compile_options(hwy_test PRIVATE ${HWY_FLAGS})
+# set_property(TARGET hwy_test PROPERTY POSITION_INDEPENDENT_CODE ON)
+# target_include_directories(hwy_test PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 # -------------------------------------------------------- hwy_list_targets
 # Generate a tool to print the compiled-in targets as defined by the current
@@ -225,7 +225,7 @@ add_custom_command(TARGET hwy_list_targets POST_BUILD
 # --------------------------------------------------------
 # Allow skipping the following sections for projects that do not need them:
 # tests, examples, benchmarks and installation.
-if (HWY_EXAMPLES_TESTS_INSTALL)
+# if (HWY_EXAMPLES_TESTS_INSTALL)
 
 # -------------------------------------------------------- install library
 install(TARGETS hwy
@@ -240,157 +240,157 @@ foreach (source ${HWY_SOURCES})
   endif()
 endforeach()
 
-install(TARGETS hwy_contrib
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-# Install all the headers keeping the relative path to the current directory
-# when installing them.
-foreach (source ${HWY_CONTRIB_SOURCES})
-  if ("${source}" MATCHES "\.h$")
-    get_filename_component(dirname "${source}" DIRECTORY)
-    install(FILES "${source}"
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
-  endif()
-endforeach()
+# install(TARGETS hwy_contrib
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# # Install all the headers keeping the relative path to the current directory
+# # when installing them.
+# foreach (source ${HWY_CONTRIB_SOURCES})
+#   if ("${source}" MATCHES "\.h$")
+#     get_filename_component(dirname "${source}" DIRECTORY)
+#     install(FILES "${source}"
+#         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
+#   endif()
+# endforeach()
 
-install(TARGETS hwy_test
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-# Install all the headers keeping the relative path to the current directory
-# when installing them.
-foreach (source ${HWY_TEST_SOURCES})
-  if ("${source}" MATCHES "\.h$")
-    get_filename_component(dirname "${source}" DIRECTORY)
-    install(FILES "${source}"
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
-  endif()
-endforeach()
+# install(TARGETS hwy_test
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+# # Install all the headers keeping the relative path to the current directory
+# # when installing them.
+# foreach (source ${HWY_TEST_SOURCES})
+#   if ("${source}" MATCHES "\.h$")
+#     get_filename_component(dirname "${source}" DIRECTORY)
+#     install(FILES "${source}"
+#         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${dirname}")
+#   endif()
+# endforeach()
 
-# Add a pkg-config file for libhwy and the contrib/test libraries.
-set(HWY_LIBRARY_VERSION "${CMAKE_PROJECT_VERSION}")
-foreach (pc libhwy.pc libhwy-contrib.pc libhwy-test.pc)
-  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${pc}.in" "${pc}" @ONLY)
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${pc}"
-      DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-endforeach()
+# # Add a pkg-config file for libhwy and the contrib/test libraries.
+# set(HWY_LIBRARY_VERSION "${CMAKE_PROJECT_VERSION}")
+# foreach (pc libhwy.pc libhwy-contrib.pc libhwy-test.pc)
+#   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${pc}.in" "${pc}" @ONLY)
+#   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${pc}"
+#       DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+# endforeach()
 
 # -------------------------------------------------------- Examples
 
 # Avoids mismatch between GTest's static CRT and our dynamic.
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-# Programming exercise with integrated benchmark
-add_executable(hwy_benchmark hwy/examples/benchmark.cc)
-target_sources(hwy_benchmark PRIVATE
-    hwy/nanobenchmark.cc
-    hwy/nanobenchmark.h)
-# Try adding either -DHWY_COMPILE_ONLY_SCALAR or -DHWY_COMPILE_ONLY_STATIC to
-# observe the difference in targets printed.
-target_compile_options(hwy_benchmark PRIVATE ${HWY_FLAGS})
-target_link_libraries(hwy_benchmark hwy)
-set_target_properties(hwy_benchmark
-    PROPERTIES RUNTIME_OUTPUT_DIRECTORY "examples/")
+# # Programming exercise with integrated benchmark
+# add_executable(hwy_benchmark hwy/examples/benchmark.cc)
+# target_sources(hwy_benchmark PRIVATE
+#     hwy/nanobenchmark.cc
+#     hwy/nanobenchmark.h)
+# # Try adding either -DHWY_COMPILE_ONLY_SCALAR or -DHWY_COMPILE_ONLY_STATIC to
+# # observe the difference in targets printed.
+# target_compile_options(hwy_benchmark PRIVATE ${HWY_FLAGS})
+# target_link_libraries(hwy_benchmark hwy)
+# set_target_properties(hwy_benchmark
+#     PROPERTIES RUNTIME_OUTPUT_DIRECTORY "examples/")
 
 # -------------------------------------------------------- Tests
 
 include(CTest)
 
-if(BUILD_TESTING)
-enable_testing()
-include(GoogleTest)
+# if(BUILD_TESTING)
+# enable_testing()
+# include(GoogleTest)
 
-set(HWY_SYSTEM_GTEST OFF CACHE BOOL "Use pre-installed googletest?")
-if(HWY_SYSTEM_GTEST)
-find_package(GTest REQUIRED)
-else()
-# Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "CMake step for googletest failed: ${result}")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "Build step for googletest failed: ${result}")
-endif()
+# set(HWY_SYSTEM_GTEST OFF CACHE BOOL "Use pre-installed googletest?")
+# if(HWY_SYSTEM_GTEST)
+# find_package(GTest REQUIRED)
+# else()
+# # Download and unpack googletest at configure time
+# configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
+# execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+#   RESULT_VARIABLE result
+#   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
+# if(result)
+#   message(FATAL_ERROR "CMake step for googletest failed: ${result}")
+# endif()
+# execute_process(COMMAND ${CMAKE_COMMAND} --build .
+#   RESULT_VARIABLE result
+#   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
+# if(result)
+#   message(FATAL_ERROR "Build step for googletest failed: ${result}")
+# endif()
 
 # Prevent overriding the parent project's compiler/linker
 # settings on Windows
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 # Add googletest directly to our build. This defines
 # the gtest and gtest_main targets.
-add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
-                 ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
-                 EXCLUDE_FROM_ALL)
+# add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
+#                  ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
+#                  EXCLUDE_FROM_ALL)
 
 # The gtest/gtest_main targets carry header search path
 # dependencies automatically when using CMake 2.8.11 or
 # later. Otherwise we have to add them here ourselves.
-if (CMAKE_VERSION VERSION_LESS 2.8.11)
-  include_directories("${gtest_SOURCE_DIR}/include")
-endif()
-endif() # HWY_SYSTEM_GTEST
+# if (CMAKE_VERSION VERSION_LESS 2.8.11)
+#   include_directories("${gtest_SOURCE_DIR}/include")
+# endif()
+# endif() # HWY_SYSTEM_GTEST
 
-set(HWY_TEST_FILES
-  hwy/contrib/dot/dot_test.cc
-  hwy/contrib/image/image_test.cc
-  hwy/contrib/math/math_test.cc
-  hwy/contrib/sort/sort_test.cc
-  hwy/aligned_allocator_test.cc
-  hwy/base_test.cc
-  hwy/highway_test.cc
-  hwy/targets_test.cc
-  hwy/examples/skeleton_test.cc
-  hwy/tests/arithmetic_test.cc
-  hwy/tests/blockwise_test.cc
-  hwy/tests/combine_test.cc
-  hwy/tests/compare_test.cc
-  hwy/tests/convert_test.cc
-  hwy/tests/crypto_test.cc
-  hwy/tests/logical_test.cc
-  hwy/tests/mask_test.cc
-  hwy/tests/memory_test.cc
-  hwy/tests/swizzle_test.cc
-  hwy/tests/test_util_test.cc
-)
+# set(HWY_TEST_FILES
+#   hwy/contrib/dot/dot_test.cc
+#   hwy/contrib/image/image_test.cc
+#   hwy/contrib/math/math_test.cc
+#   hwy/contrib/sort/sort_test.cc
+#   hwy/aligned_allocator_test.cc
+#   hwy/base_test.cc
+#   hwy/highway_test.cc
+#   hwy/targets_test.cc
+#   hwy/examples/skeleton_test.cc
+#   hwy/tests/arithmetic_test.cc
+#   hwy/tests/blockwise_test.cc
+#   hwy/tests/combine_test.cc
+#   hwy/tests/compare_test.cc
+#   hwy/tests/convert_test.cc
+#   hwy/tests/crypto_test.cc
+#   hwy/tests/logical_test.cc
+#   hwy/tests/mask_test.cc
+#   hwy/tests/memory_test.cc
+#   hwy/tests/swizzle_test.cc
+#   hwy/tests/test_util_test.cc
+# )
 
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests)
-foreach (TESTFILE IN LISTS HWY_TEST_FILES)
-  # The TESTNAME is the name without the extension or directory.
-  get_filename_component(TESTNAME ${TESTFILE} NAME_WE)
-  add_executable(${TESTNAME} ${TESTFILE})
-  target_compile_options(${TESTNAME} PRIVATE ${HWY_FLAGS})
-  # Test all targets, not just the best/baseline. This changes the default
-  # policy to all-attainable; note that setting -DHWY_COMPILE_* directly can
-  # cause compile errors because only one may be set, and other CMakeLists.txt
-  # that include us may set them.
-  target_compile_options(${TESTNAME} PRIVATE -DHWY_IS_TEST=1)
+# file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests)
+# foreach (TESTFILE IN LISTS HWY_TEST_FILES)
+#   # The TESTNAME is the name without the extension or directory.
+#   get_filename_component(TESTNAME ${TESTFILE} NAME_WE)
+#   add_executable(${TESTNAME} ${TESTFILE})
+#   target_compile_options(${TESTNAME} PRIVATE ${HWY_FLAGS})
+#   # Test all targets, not just the best/baseline. This changes the default
+#   # policy to all-attainable; note that setting -DHWY_COMPILE_* directly can
+#   # cause compile errors because only one may be set, and other CMakeLists.txt
+#   # that include us may set them.
+#   target_compile_options(${TESTNAME} PRIVATE -DHWY_IS_TEST=1)
 
-  if(HWY_SYSTEM_GTEST)
-    target_link_libraries(${TESTNAME} hwy hwy_contrib hwy_test GTest::GTest GTest::Main)
-  else()
-    target_link_libraries(${TESTNAME} hwy hwy_contrib hwy_test gtest gtest_main)
-  endif()
-  # Output test targets in the test directory.
-  set_target_properties(${TESTNAME} PROPERTIES PREFIX "tests/")
+#   if(HWY_SYSTEM_GTEST)
+#     target_link_libraries(${TESTNAME} hwy hwy_contrib hwy_test GTest::GTest GTest::Main)
+#   else()
+#     target_link_libraries(${TESTNAME} hwy hwy_contrib hwy_test gtest gtest_main)
+#   endif()
+#   # Output test targets in the test directory.
+#   set_target_properties(${TESTNAME} PROPERTIES PREFIX "tests/")
 
-  if (HWY_EMSCRIPTEN)
-    set_target_properties(${TESTNAME} PROPERTIES LINK_FLAGS "-s SINGLE_FILE=1")
-  endif()
+#   if (HWY_EMSCRIPTEN)
+#     set_target_properties(${TESTNAME} PROPERTIES LINK_FLAGS "-s SINGLE_FILE=1")
+#   endif()
 
-  if(${CMAKE_VERSION} VERSION_LESS "3.10.3")
-    gtest_discover_tests(${TESTNAME} TIMEOUT 60)
-  else ()
-    gtest_discover_tests(${TESTNAME} DISCOVERY_TIMEOUT 60)
-  endif ()
-endforeach ()
+#   if(${CMAKE_VERSION} VERSION_LESS "3.10.3")
+#     gtest_discover_tests(${TESTNAME} TIMEOUT 60)
+#   else ()
+#     gtest_discover_tests(${TESTNAME} DISCOVERY_TIMEOUT 60)
+#   endif ()
+# endforeach ()
 
-# The skeleton test uses the skeleton library code.
-target_sources(skeleton_test PRIVATE hwy/examples/skeleton.cc)
+# # The skeleton test uses the skeleton library code.
+# target_sources(skeleton_test PRIVATE hwy/examples/skeleton.cc)
 
-endif() # BUILD_TESTING
+# endif() # BUILD_TESTING
 
-endif() # HWY_EXAMPLES_TESTS_INSTALL
+# endif() # HWY_EXAMPLES_TESTS_INSTALL
